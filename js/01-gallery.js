@@ -1,12 +1,10 @@
-import { galleryItems } from './gallery-items.js';
+import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
 console.log(galleryItems);
 
-
 const gallery = document.querySelector(".gallery");
 gallery.addEventListener("click", onShowBigImage);
-
 
 (function createMarkup() {
   const itemMarkup = galleryItems
@@ -36,19 +34,27 @@ function onShowBigImage(e) {
 
   let bigImageSrc = e.target.dataset.source;
 
-  const modal = basicLightbox.create(
-    `<img src="${bigImageSrc}" width="800" height="600">`
-  );
-  modal.show();
+  let modal = {};
 
-  if (modal.visible()) {
-    window.addEventListener("keydown", onPressKeyESC);
+  function onBasicLightbox(bigImageSrc) {
+    modal = basicLightbox.create(
+      `<img src="${bigImageSrc}" width="800" height="600">`,
+      {
+        onShow: () => {
+          window.addEventListener("keydown", onPressKeyESC);
+        },
+        onClose: () => {
+          window.removeEventListener("keydown", onPressKeyESC);
+        },
+      }
+    );
+    modal.show();
   }
 
   function onPressKeyESC(e) {
     if (e.code === "Escape") {
       modal.close();
-      window.removeEventListener("keydown", onPressKeyESC);
     }
   }
 }
+onBasicLightbox(bigImageSrc);
