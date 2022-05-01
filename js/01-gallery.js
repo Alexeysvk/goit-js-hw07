@@ -34,22 +34,19 @@ function onShowBigImage(e) {
 
   let bigImageSrc = e.target.dataset.source;
 
-  let modal = {};
+  const modal = basicLightbox.create(
+    `<img src="${bigImageSrc}" width="800" height="600">`,
+    {
+      onShow: () => {
+        window.addEventListener("keydown", onPressKeyESC);
+      },
+      onClose: () => {
+        window.removeEventListener("keydown", onPressKeyESC);
+      },
+    }
+  );
 
-  function onBasicLightbox(bigImageSrc) {
-    modal = basicLightbox.create(
-      `<img src="${bigImageSrc}" width="800" height="600">`,
-      {
-        onShow: () => {
-          window.addEventListener("keydown", onPressKeyESC);
-        },
-        onClose: () => {
-          window.removeEventListener("keydown", onPressKeyESC);
-        },
-      }
-    );
-    modal.show();
-  }
+  modal.show();
 
   function onPressKeyESC(e) {
     if (e.code === "Escape") {
@@ -57,4 +54,5 @@ function onShowBigImage(e) {
     }
   }
 }
+
 onBasicLightbox(bigImageSrc);
